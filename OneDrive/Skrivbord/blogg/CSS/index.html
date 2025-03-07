@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseblogg</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h2>Resa i Grekland!</h2>
+            <br>
+            <img src="images/kombinationsresor.jpg" alt="Resebloggens logotyp" class="header-img">
+            <nav>
+                <br>
+                <ul>
+                    <li><a href="#">Hem</a></li>
+                    <li><a href="#create-post">Skapa Inlägg</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Sektion för att visa de senaste blogginläggen -->
+            <section id="posts-section">
+                <h3>Senast inlägg</h3>
+                <div id="posts-list"></div>
+                <div class="post">
+                    <h4>Santorini</h4>
+                    <p><em>Av Maria | 2025-03-26</em></p>
+                    <p>En pärla i Egeiska havet med enastående utsikt och vacker atmosfär!</p>
+                    <img src="images/santorini.jpg" alt="Utsikt från Santorini, en vacker ö i Grekland"
+                        class="post-image">
+                </div>
+            </section>
+
+            <!-- Sektion för att skapa nya inlägg -->
+            <section id="create-post">
+                <h3>Skapa nytt blogginlägg</h3>
+                <form id="create-post-form">
+                    <input type="text" id="title" placeholder="Titel" required>
+                    <input type="text" id="name" placeholder="Ditt namn" required>
+                    <textarea id="create-content" placeholder="Skriv ditt inlägg här..." required></textarea>
+                    <input type="file" id="images" accept="image/*">
+                    <button type="submit">Publicera inlägg</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Reseblogg. Alla rättigheter reserverade.</p>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>
