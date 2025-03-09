@@ -6,9 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const nameInput = document.getElementById('name');
     const imageInput = document.getElementById('images');
 
-    let posts = JSON.parse(localStorage.getItem('posts')) || []; // Om inga inlägg finns, använd en tom array
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
 
-    // Funktion för att visa alla inlägg
     function renderPosts() {
         postsList.innerHTML = '';
 
@@ -32,41 +31,40 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
 
-            // Lägg till eventlyssnare för att ta bort inlägg
             const deleteButton = postElement.querySelector('.delete-post');
             deleteButton.addEventListener('click', () => {
-                posts.splice(index, 1); // Ta bort inlägget från arrayen
-                updateLocalStorage();//Uppdatera localstorage efter borttagning
-                renderPosts(); // Rendera om alla inlägg
+                posts.splice(index, 1);
+                updateLocalStorage();
+                renderPosts();
             });
 
-            // Lägg till funktionalitet för att lägga till kommentarer
+
             const addCommentButton = postElement.querySelector('.add-comment');
             addCommentButton.addEventListener('click', () => {
                 const commentInput = postElement.querySelector('.comment-input');
                 const commentText = commentInput.value;
                 if (commentText) {
-                    post.comments.push(commentText); // Lägg till kommentaren
-                    commentInput.value = ''; // Töm textfältet
-                    renderPosts(); // Rendera om inlägget och visa nya kommentarer
+                    post.comments.push(commentText);
+                    commentInput.value = '';
+                    renderPosts();
                 }
             });
 
-            // Visa kommentarer
+
             const commentsList = postElement.querySelector('.comments-display');
             post.comments.forEach(comment => {
                 const commentElement = document.createElement('li');
                 commentElement.textContent = comment;
                 commentsList.appendChild(commentElement);
             });
-            //Lägg till inlägget till post-listan
+
             postsList.appendChild(postElement);
         });
     }
 
-    // Event för att skapa ett nytt inlägg
+
     createPostForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Förhindra standardformulärbeteende
+        event.preventDefault();
 
         const title = titleInput.value;
         const content = contentInput.value;
@@ -84,33 +82,33 @@ document.addEventListener('DOMContentLoaded', function () {
             content,
             date,
             name,
-            comments: [], // En array för kommentarer
+            comments: [],
             image: imageUrl
         };
 
-        posts.unshift(newPost); // Lägg till det nya inlägget i början av arrayen (hogst upp)
-        updateLocalStorage(); //Uppdatera Localstorage
-        renderPosts(); // Rendera om inläggen
+        posts.unshift(newPost);
+        updateLocalStorage();
+        renderPosts();
 
-        // Scrolla automatiskt till det senaste inlägget
+
         setTimeout(() => {
             const latestPost = postsList.querySelector('.post');
             latestPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 0);
 
-        // Töm formuläret
+
         titleInput.value = '';
         contentInput.value = '';
         nameInput.value = '';
         imageInput.value = '';
     });
 
-    // Funktion för att uppdatera inlägg i localStorage
+
     function updateLocalStorage() {
-        localStorage.setItem('posts', JSON.stringify(posts)); // Spara inläggen i localStorage
+        localStorage.setItem('posts', JSON.stringify(posts));
     }
 
-    // Rendera alla inlägg initialt
+
     renderPosts();
 });
 
