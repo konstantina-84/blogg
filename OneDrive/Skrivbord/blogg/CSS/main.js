@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const nameInput = document.getElementById('name');
     const imageInput = document.getElementById('images');
 
-    let posts = []; // Lista för att hålla alla blogginlägg
+    let posts = JSON.parse(localStorage.getItem('posts')) || []; // Om inga inlägg finns, använd en tom array
 
     // Funktion för att visa alla inlägg
     function renderPosts() {
@@ -19,23 +19,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 <h4>${post.title}</h4>
                 <p><em>Av ${post.name} | ${post.date}</em></p>
                 <p>${post.content}</p>
-                <button class="delete-post" data-index="${index}">Ta bort</button> <img src="${post.image}" alt="Bild för inlägg" class="post-image">
+                <img src="${post.image}" alt="Bild för inlägg" class="post-image">
+                 <button class="delete-post" data-index="${index}">Ta bort</button> 
                 <div class="comments-section">
                     <div class="comments-list">
                         <h4>Kommentarer:</h4>
-                        <textarea class="comment-input" placeholder="Lägg till en kommentar..."></textarea>
-                        <button class="add-comment" data-index="${index}">Kommentera</button>
+                        <textarea class="comment-input" placeholder="Lägg till en kommentar..."></textarea> 
+                        <button class="add-comment" data-index="${index}">Kommentera</button> 
                         <ul class="comments-display"></ul>   
                 </div>
             </div>
             `;
 
 
-
             // Lägg till eventlyssnare för att ta bort inlägg
             const deleteButton = postElement.querySelector('.delete-post');
             deleteButton.addEventListener('click', () => {
                 posts.splice(index, 1); // Ta bort inlägget från arrayen
+                updateLocalStorage();//Uppdatera localstorage efter borttagning
                 renderPosts(); // Rendera om alla inlägg
             });
 
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Visa kommentarer
-            const commentsList = postElement.querySelector('.comments-list');
+            const commentsList = postElement.querySelector('.comments-display');
             post.comments.forEach(comment => {
                 const commentElement = document.createElement('li');
                 commentElement.textContent = comment;
@@ -72,7 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const name = nameInput.value || "Anonym";
         const date = new Date().toLocaleDateString();
         const imageFile = imageInput.files[0];
-        const imageUrl = imageFile ? URL.createObjectURL(imageFile) : 'images/default.jpg';
+
+        let imageUrl = '';
+        if (imageFile) {
+            imageUrl = URL.createObjectURL(imageFile);
+        }
 
         const newPost = {
             title,
@@ -83,8 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
             image: imageUrl
         };
 
-        posts.push(newPost); // Lägg till det nya inlägget i arrayen
+        posts.unshift(newPost); // Lägg till det nya inlägget i början av arrayen (hogst upp)
+        updateLocalStorage(); //Uppdatera Localstorage
         renderPosts(); // Rendera om inläggen
+
+        // Scrolla automatiskt till det senaste inlägget
+        setTimeout(() => {
+            const latestPost = postsList.querySelector('.post');
+            latestPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
 
         // Töm formuläret
         titleInput.value = '';
@@ -93,10 +105,13 @@ document.addEventListener('DOMContentLoaded', function () {
         imageInput.value = '';
     });
 
+    // Funktion för att uppdatera inlägg i localStorage
+    function updateLocalStorage() {
+        localStorage.setItem('posts', JSON.stringify(posts)); // Spara inläggen i localStorage
+    }
+
     // Rendera alla inlägg initialt
     renderPosts();
 });
-
-
 
 
